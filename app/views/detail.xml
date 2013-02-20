@@ -1,0 +1,17 @@
+<Alloy>
+	<View class="container">
+		<TableView class="form">
+			<TableViewSection headerTitle="Title">
+                <TableViewRow><TextField hintText="Title" id="title"></TextField></TableViewRow>
+            </TableViewSection>
+
+            <TableViewSection headerTitle="Location">
+                <TableViewRow><TextField hintText="Location" id="location"></TextField></TableViewRow>
+            </TableViewSection>
+
+            <TableViewSection headerTitle="Notes">
+                <TableViewRow><TextArea hintText="Notes"></TextArea></TableViewRow>
+            </TableViewSection>
+		</TableView>
+	</View>
+</Alloy>

@@ -1,0 +1,9 @@
+#appname:TrafficContacts
+#appid:com.fryertom.trafficcontacts
+#type:mobile
+#guid:fafdf74f-c07b-412f-a57e-fb0b21dc5ed1
+#version:1.0
+#publisher:Tom Fryer
+#url:http://
+#image:appicon.png
+#desc:A simple contacts viewer for Mobile devices
