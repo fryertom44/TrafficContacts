@@ -11,14 +11,12 @@ function InitAdapter(config) {
 }
 
 function apiCall(_options, _callback) {
-    Ti.API.debug("TF test. Show header: " + _options.headers);
     Ti.API.debug("[REST API] apiCall ", _options);
     var xhr = Ti.Network.createHTTPClient({
         timeout: 5000
     });
     xhr.open(_options.type, _options.url);
     xhr.onload = function() {
-        Ti.API.debug("TF TEST - loaded OK");
         _callback({
             success: !0,
             responseText: xhr.responseText || null,
@@ -26,25 +24,18 @@ function apiCall(_options, _callback) {
         });
     };
     xhr.onerror = function() {
-        Ti.API.debug("TF TEST - error attempting to load URL");
         _callback({
             success: !1,
             responseText: xhr.responseText
         });
         Ti.API.error("[REST API] apiCall ERROR: " + xhr.responseText);
     };
-    var user = "fryertom@gmail.com", pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2", token = user.concat(":", pass);
-    xhr.setRequestHeader("Authorization", "Basic ZnJ5ZXJ0b21AZ21haWwuY29tOk1SNmdGZXFHNTg1SjVTVlo3TG52MTI4d0hoVDJFQmdqbDVDN0YyaTI=");
-    for (var header in _options.headers) {
-        Ti.API.debug("TF test. Show header: " + _options.headers[header]);
-        xhr.setRequestHeader(header, _options.headers[header]);
-    }
+    for (var header in _options.headers) xhr.setRequestHeader(header, _options.headers[header]);
     _options.beforeSend && _options.beforeSend(xhr);
-    Ti.API.debug("[REST API] Content-type ", _options.headers["Content-type"]);
     xhr.send(_options.data || null);
 }
 
-function Sync(model, method, opts) {
+function Sync(method, model, opts) {
     var methodMap = {
         create: "POST",
         read: "GET",
@@ -76,7 +67,6 @@ function Sync(model, method, opts) {
     }
     params.headers["Content-Type"] = "application/json";
     params.headers.Accept = "application/json";
-    params.headers.Authorization = "Basic ZnJ5ZXJ0b21AZ21haWwuY29tOk1SNmdGZXFHNTg1SjVTVlo3TG52MTI4d0hoVDJFQmdqbDVDN0YyaTI=";
     switch (method) {
       case "delete":
         if (!model.id) {
@@ -87,7 +77,6 @@ function Sync(model, method, opts) {
         params.url = params.url + "/" + model.id;
         apiCall(params, function(_response) {
             if (_response.success) {
-                Ti.API.debug("TF test - about to parse response...");
                 var data = JSON.parse(_response.responseText);
                 params.success(null, _response.responseText);
                 model.trigger("fetch");

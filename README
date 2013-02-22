@@ -1,7 +1,8 @@
-Welcome to your Appcelerator Titanium Mobile Project
+Welcome to your Traffic Contacts
 
-This is a blank project.  Start by editing your application's app.js to 
-make your first mobile project using Titanium.
+This is a cross-platform mobile app written in Titanium Alloy, an MVC framework built using Node.js and Backbone.js. 
+This app will display a list of clients and suppliers from your TrafficLive account. 
+For each company you will be able to see some basic information and also see where the company is on the map.
 
 
 

@@ -103,10 +103,7 @@ function apiCall(_options, _callback) {
             });
             Ti.API.error("[SQL REST API] apiCall ERROR: " + xhr.responseText);
         };
-        for (var header in _options.headers) {
-            Ti.API.debug("TF test. Show header: " + _options.headers[header]);
-            xhr.setRequestHeader(header, _options.headers[header]);
-        }
+        for (var header in _options.headers) xhr.setRequestHeader(header, _options.headers[header]);
         _options.beforeSend && _options.beforeSend(xhr);
         xhr.send(_options.data || null);
     } else {
@@ -118,7 +115,7 @@ function apiCall(_options, _callback) {
     }
 }
 
-function Sync(model, method, opts) {
+function Sync(method, model, opts) {
     function createSQL(data) {
         var attrObj = {};
         if (DEBUG) {

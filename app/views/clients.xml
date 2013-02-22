@@ -1,0 +1,13 @@
+<Alloy>
+    <Tab id="clientsTab" title="Clients" icon="KS_nav_ui.png">
+        <Window id="clientWindow"  title="Clients" class='container'>
+            <TableView id="list">
+		        <HeaderPullView platform='ios' />
+		        <HeaderView platform='android'>
+		            <Button title='Refresh' onClick='refreshItems' />
+		        </HeaderView>
+                <!-- <Require src="row"/> -->
+            </TableView>
+        </Window>
+    </Tab>
+</Alloy>

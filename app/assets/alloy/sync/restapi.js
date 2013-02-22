@@ -19,9 +19,6 @@ function InitAdapter(config) {
 }
 
 function apiCall(_options, _callback) {
-		//TESTING TF
-			Ti.API.debug('TF test. Show header: ' + _options.headers);
-
 	Ti.API.debug("[REST API] apiCall ", _options);
 	var xhr = Ti.Network.createHTTPClient({
 		timeout : 5000
@@ -31,7 +28,6 @@ function apiCall(_options, _callback) {
 	xhr.open(_options.type, _options.url);
 
 	xhr.onload = function() {
-		Ti.API.debug("TF TEST - loaded OK");
 		_callback({
 			success : true,
 			responseText : xhr.responseText || null,
@@ -41,7 +37,6 @@ function apiCall(_options, _callback) {
 
 	//Handle error
 	xhr.onerror = function() {
-		Ti.API.debug("TF TEST - error attempting to load URL");
 		_callback({
 			success : false,
 			responseText : xhr.responseText
@@ -49,45 +44,18 @@ function apiCall(_options, _callback) {
 		Ti.API.error('[REST API] apiCall ERROR: ' + xhr.responseText)
 	}
 
-
-
-
-
-
-
-
-
-		//TESTING TF
-var user = "fryertom@gmail.com";
-	  var pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2";
-	  var token = user.concat(":", pass);
-	  // xhr.setRequestHeader('Authorization', ("Basic ".concat(Ti.Utils.base64encode(token))));
-	  xhr.setRequestHeader('Authorization', "Basic ZnJ5ZXJ0b21AZ21haWwuY29tOk1SNmdGZXFHNTg1SjVTVlo3TG52MTI4d0hoVDJFQmdqbDVDN0YyaTI=");
-
-
-
 	for (var header in _options.headers) {
-		//TESTING TF
-		Ti.API.debug('TF test. Show header: ' + _options.headers[header]);
 		xhr.setRequestHeader(header, _options.headers[header]);
 	}
-
-
-
-
-
-
-
 
 	if (_options.beforeSend) {
 		_options.beforeSend(xhr);
 	}
 
-	Ti.API.debug("[REST API] Content-type ", _options.headers['Content-type']);
 	xhr.send(_options.data || null);
 }
 
-function Sync(model, method, opts) {
+function Sync(method, model, opts) {
 	var methodMap = {
 		'create' : 'POST',
 		'read' : 'GET',
@@ -137,15 +105,6 @@ function Sync(model, method, opts) {
 	params.headers['Content-Type'] = 'application/json';
     params.headers['Accept'] = 'application/json';
 
-	//TESTING TF
-	params.headers['Authorization'] = "Basic ZnJ5ZXJ0b21AZ21haWwuY29tOk1SNmdGZXFHNTg1SjVTVlo3TG52MTI4d0hoVDJFQmdqbDVDN0YyaTI=";
-
-	// params.headers['Authorization'] = function(xhr) {
-		// var user = "fryertom@gmail.com";
-		// var pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2";
-		// var token = user.concat(":", pass);
-		// return "Basic ".concat(Ti.Utils.base64encode(token));
-	// }
 	switch(method) {
 
 		case 'delete' :
@@ -158,7 +117,6 @@ function Sync(model, method, opts) {
 
 			apiCall(params, function(_response) {
 				if (_response.success) {
-					Ti.API.debug("TF test - about to parse response...");
 					var data = JSON.parse(_response.responseText);
 					params.success(null, _response.responseText);
 					model.trigger("fetch");

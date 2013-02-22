@@ -1,0 +1,15 @@
+".container": {
+	backgroundColor: "white"
+},
+"#mapWindow":{
+	title : "Location",
+	barColor: '#000',
+	backgroundColor:'#fff'
+},
+"#mapView" : {
+	mapType: Ti.Map.STANDARD_TYPE,
+	animate:true,
+	regionFit:true,
+	userLocation:false,
+	annotations:[]
+}

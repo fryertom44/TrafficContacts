@@ -1,12 +1,14 @@
 <Alloy>
 	<TabGroup>
-		<Tab title="Clients" icon="KS_nav_ui.png">
+        <Require src="clients"/>
+        <!-- Tab included via <Require> tag -->
+        <!-- <Require src="suppliers"/>
+		<Tab id="clientsTab" title="Clients" icon="KS_nav_ui.png">
 			<Window title="Clients">
-				<Label>I am Window 1</Label>
-				<Require type="view" src="list" id="list"/>
+				<Require type="view" src="clients" id="list"/>
 			</Window>
-		</Tab>
-		<Tab title="Suppliers" icon="KS_nav_views.png">
+		</Tab> -->
+		<Tab id="suppliersTab" title="Suppliers" icon="KS_nav_views.png">
 			<Window title="Suppliers">
 				<Label>I am Window 2</Label>
 			</Window>

@@ -1,17 +1,60 @@
 <Alloy>
-	<View class="container">
+    <Model src="Client" instance="true" id="clientDetail"> 
+
+	<Window id="detailWindow"  title="Detail" class='container'>
 		<TableView class="form">
-			<TableViewSection headerTitle="Title">
-                <TableViewRow><TextField hintText="Title" id="title"></TextField></TableViewRow>
+			<TableViewSection>
+                <TableViewRow>
+                	<Label class="formLabel">Name:</Label>
+                	<TextField hintText="Name" id="companyName"/>
+            	</TableViewRow>
+                <TableViewRow>
+	            	<Label class="formLabel">Website:</Label>
+					<TextField hintText="Website" id="website">
+				</TableViewRow>
+    	        <TableViewRow>
+	            	<Label class="formLabel">Industry:</Label>
+    	        	<TextField hintText="Industry Type" id="industryType">
+	        	</TableViewRow>
             </TableViewSection>
 
             <TableViewSection headerTitle="Location">
-                <TableViewRow><TextField hintText="Location" id="location"></TextField></TableViewRow>
+                <TableViewRow id="addressRow">
+                	<TextArea id="addressText" hintText="Address"/>
+                </TableViewRow>
+    	        <TableViewRow>
+    	        	<Button id="showMapButton">Show Map</Button>
+	        	</TableViewRow>
             </TableViewSection>
 
+            <TableViewSection headerTitle="Primary Contact">
+                <TableViewRow>
+	            	<Label class="formLabel">Name:</Label>
+    	        	<TextField hintText="Name" id="contactName">
+            	</TableViewRow>
+                <TableViewRow>
+	            	<Label class="formLabel">Job Title:</Label>
+    	        	<TextField hintText="Job Title" id="contactJobTitle">
+            	</TableViewRow>
+	             <TableViewRow>
+	            	<Label class="formLabel">Phone:</Label>
+    	        	<TextField hintText="Phone" id="contactPhone">
+            	</TableViewRow>
+	             <TableViewRow>
+	            	<Label class="formLabel">Mobile:</Label>
+    	        	<TextField hintText="Mobile" id="contactMobile">
+            	</TableViewRow>
+	             <TableViewRow>
+	            	<Label class="formLabel">Email:</Label>
+    	        	<TextField hintText="Email" id="contactEmail">
+            	</TableViewRow>
+            </TableViewSection>
+            
             <TableViewSection headerTitle="Notes">
-                <TableViewRow><TextArea hintText="Notes"></TextArea></TableViewRow>
+                <TableViewRow id="notesRow">
+                	<TextArea hintText="Notes">
+            	</TableViewRow>
             </TableViewSection>
 		</TableView>
-	</View>
+	</Window>
 </Alloy>

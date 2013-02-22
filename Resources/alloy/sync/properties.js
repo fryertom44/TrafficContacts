@@ -6,7 +6,7 @@ function guid() {
     return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
 }
 
-function Sync(model, method, opts) {
+function Sync(method, model, opts) {
     var prefix = model.config.adapter.collection_name ? model.config.adapter.collection_name : "default", regex = new RegExp("^(" + prefix + ")\\-(.+)$"), resp = null;
     if (method === "read") if (opts.parse) {
         var list = [];
@@ -35,7 +35,7 @@ function Sync(model, method, opts) {
     if (resp) {
         _.isFunction(opts.success) && opts.success(resp);
         method === "read" && model.trigger("fetch");
-    } else _.isFunction(opts.error) && opts.error("Record not found");
+    } else _.isFunction(opts.error) && opts.error(resp);
 }
 
 var Alloy = require("alloy"), _ = require("alloy/underscore")._, TAP = Ti.App.Properties;

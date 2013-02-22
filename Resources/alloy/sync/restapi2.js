@@ -23,12 +23,10 @@ function apiCall(_options, _callback) {
     };
     for (var header in _options.headers) xhr.setRequestHeader(header, _options.headers[header]);
     _options.beforeSend && _options.beforeSend(xhr);
-    Ti.API.debug("[REST API] Content-type ", _options.headers["Content-type"]);
     xhr.send(_options.data || null);
 }
 
-function Sync(model, method, opts) {
-    debugger;
+function Sync(method, model, opts) {
     var methodMap = {
         create: "POST",
         read: "GET",
@@ -62,14 +60,59 @@ function Sync(model, method, opts) {
     params.headers.Accept = "application/json";
     switch (method) {
       case "delete":
+        if (!model.id) {
+            params.error(null, "MISSING MODEL ID");
+            Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+            return;
+        }
+        params.url = params.url + "/" + model.id;
+        apiCall(params, function(_response) {
+            if (_response.success) {
+                var data = JSON.parse(_response.responseText);
+                params.success(null, _response.responseText);
+                model.trigger("fetch");
+            } else {
+                params.error(JSON.parse(_response.responseText), _response.responseText);
+                Ti.API.error("SYNC ERROR: " + _response.responseText);
+            }
+        });
+        break;
       case "create":
+        params.data = JSON.stringify(model.toJSON());
+        apiCall(params, function(_response) {
+            if (_response.success) {
+                var data = JSON.parse(_response.responseText);
+                data.id == undefined && (data.id = guid());
+                params.success(data, JSON.stringify(data));
+                model.trigger("fetch");
+            } else {
+                params.error(JSON.parse(_response.responseText), _response.responseText);
+                Ti.API.error("[REST API] ERROR: " + _response.responseText);
+            }
+        });
+        break;
       case "update":
-        throw "Not Implemented";
+        if (!model.id) {
+            params.error(null, "MISSING MODEL ID");
+            Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+            return;
+        }
+        params.url = params.url + "/" + model.id;
+        params.data = JSON.stringify(model.toJSON());
+        apiCall(params, function(_response) {
+            if (_response.success) {
+                var data = JSON.parse(_response.responseText);
+                params.success(data, JSON.stringify(data));
+                model.trigger("fetch");
+            } else {
+                params.error(JSON.parse(_response.responseText), _response.responseText);
+                Ti.API.error("[REST API] ERROR: " + _response.responseText);
+            }
+        });
+        break;
       case "read":
         apiCall(params, function(_response) {
-            Ti.API.debug("TF test - apicall callback method. Response = " + _response.success);
             if (_response.success) {
-                Ti.API.debug("TF test - about to parse response..." + _response.responseText);
                 var data = JSON.parse(_response.responseText);
                 params.success(data, _response.responseText);
             } else {

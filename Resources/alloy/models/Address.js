@@ -1,23 +1,21 @@
 exports.definition = {
     config: {
-        URL: "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client",
         adapter: {
             type: "restapi2",
-            collection_name: "client",
+            collection_name: "address",
             idAttribute: "id"
         },
         columns: {
-            id: "int",
-            name: "string"
+            id: "int"
         }
     },
     extendModel: function(Model) {
         _.extend(Model.prototype, {
             url: function() {
-                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/" + this.id;
+                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/address/" + this.id;
             },
             parse: function(_resp, xhr) {
-                return _resp;
+                return _resp.resultList;
             }
         });
         return Model;
@@ -25,7 +23,7 @@ exports.definition = {
     extendCollection: function(Collection) {
         _.extend(Collection.prototype, {
             url: function() {
-                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client";
+                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/address/";
             },
             parse: function(_resp, xhr) {
                 return _resp.resultList;
@@ -37,9 +35,9 @@ exports.definition = {
 
 var Alloy = require("alloy"), _ = require("alloy/underscore")._, model, collection;
 
-model = Alloy.M("client", exports.definition, []);
+model = Alloy.M("address", exports.definition, []);
 
-collection = Alloy.C("client", exports.definition, model);
+collection = Alloy.C("address", exports.definition, model);
 
 exports.Model = model;
 

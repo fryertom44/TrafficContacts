@@ -2,6 +2,58 @@
 	backgroundColor: "white"
 }
 
+"Window": {
+	backgroundColor: "#fff",
+	barColor: '#000'
+},
+
 ".form": {
   style: Ti.UI.iPhone.TableViewStyle.GROUPED
 }
+
+"TableViewRow":{
+	height: 44
+}
+
+".formLabel": {
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE,
+	color: "#000",
+	font: {
+		fontSize: 17,
+		fontFamily: 'Helvetica Neue',
+		fontWeight: "bold"
+	},
+	left: 22,
+	textAlign: 'left'
+}
+
+"TextField": {
+	right: 22,
+	textAlign: 'right',
+	editable: false,
+	color:"#496197"
+}
+
+"#addressRow":{
+	height: 140,
+}
+
+"TextArea":{
+	backgroundColor: 'transparent',
+	left: 0,
+	right: 0,
+	top: 0,
+	bottom: 0,
+	editable: false
+}
+
+"Button" :{
+	height:Ti.UI.SIZE,
+	width: Ti.UI.SIZE,
+	left: 0,
+	right: 0,
+	style:Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+	// backgroundColor: "transparent",
+	textAlign: "center"
+},

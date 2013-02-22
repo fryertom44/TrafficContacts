@@ -2,10 +2,24 @@ function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     $model = arguments[0] ? arguments[0].$model : null;
     var $ = this, exports = {}, __defers = {};
-    $.__views.list = A$(Ti.UI.createTableView({
+    $.__views.clientWindow = Ti.UI.createWindow({
+        backgroundColor: "#fff",
+        barColor: "#000",
+        id: "clientWindow",
+        title: "Clients"
+    });
+    $.__views.list = Ti.UI.createTableView({
         id: "list"
-    }), "TableView", null);
-    $.addTopLevelView($.__views.list);
+    });
+    $.__views.clientWindow.add($.__views.list);
+    $.__views.list.headerPullView = undefined;
+    $.__views.clientsTab = Ti.UI.createTab({
+        window: $.__views.clientWindow,
+        id: "clientsTab",
+        title: "Clients",
+        icon: "KS_nav_ui.png"
+    });
+    $.addTopLevelView($.__views.clientsTab);
     exports.destroy = function() {};
     _.extend($, $.__views);
     sendAuthentication = function(xhr) {
@@ -20,12 +34,12 @@ function Controller() {
         success: function(collection, response) {
             Ti.API.debug("Clients list loaded!!!!!");
             console.log(response);
-            debugger;
             var data = [];
             Alloy.Collections.Client.map(function(client) {
-                var clientName = client.get("name"), row = Ti.UI.createTableViewRow({
-                    title: clientName
-                });
+                var arg = {
+                    title: client.get("name"),
+                    data: client
+                }, row = Alloy.createController("row", arg).getView();
                 data.push(row);
             });
             $.list.setData(data);
@@ -35,9 +49,17 @@ function Controller() {
             console.log(response);
         }
     });
+    $.list.addEventListener("click", function(_e) {
+        var clientSelected = Alloy.Collections.Client.get(_e.row.id), detailController = Alloy.createController("detail", {
+            parentTab: $.clientsTab,
+            data: clientSelected
+        });
+        $.clientsTab.open(detailController.getView());
+    });
+    __defers["$.__views.__alloyId2!click!refreshItems"] && $.__views.__alloyId2.addEventListener("click", refreshItems);
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, A$ = Alloy.A, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
 
 module.exports = Controller;

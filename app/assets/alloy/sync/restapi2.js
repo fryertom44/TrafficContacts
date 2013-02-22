@@ -45,7 +45,7 @@ function apiCall(_options, _callback) {
     xhr.send(_options.data || null);
 }
  
-function Sync(model, method, opts) { debugger;
+function Sync(method, model, opts) {
  
     var methodMap = {
         'create' : 'POST',
@@ -98,12 +98,69 @@ function Sync(model, method, opts) { debugger;
 
     switch(method) {
  
-        case 'delete' :
-        case 'create' :
-        case 'update' :
-            throw "Not Implemented"
-            break;
- 
+		case 'delete' :
+			if (!model.id) {
+				params.error(null, "MISSING MODEL ID");
+				Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+				return;
+			}
+			params.url = params.url + '/' + model.id;
+
+			apiCall(params, function(_response) {
+				if (_response.success) {
+					var data = JSON.parse(_response.responseText);
+					params.success(null, _response.responseText);
+					model.trigger("fetch");
+					// fire event
+				} else {
+					params.error(JSON.parse(_response.responseText), _response.responseText);
+					Ti.API.error('SYNC ERROR: ' + _response.responseText)
+				}
+			});
+			break;
+		case 'create' :
+			// convert to string for API call
+			params.data = JSON.stringify(model.toJSON());
+
+			apiCall(params, function(_response) {
+				if (_response.success) {
+					var data = JSON.parse(_response.responseText);
+					//Rest API should return a new model id.
+					if (data.id == undefined) {
+						data.id = guid();
+						//if not - create one
+					}
+					params.success(data, JSON.stringify(data));
+					model.trigger("fetch");
+					// fire event
+				} else {
+					params.error(JSON.parse(_response.responseText), _response.responseText);
+					Ti.API.error('[REST API] ERROR: ' + _response.responseText)
+				}
+			});
+			break;
+		case 'update' :
+			if (!model.id) {
+				params.error(null, "MISSING MODEL ID");
+				Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+				return;
+			}
+
+			// setup the url & data
+			params.url = params.url + '/' + model.id;
+			params.data = JSON.stringify(model.toJSON());
+
+			apiCall(params, function(_response) {
+				if (_response.success) {
+					var data = JSON.parse(_response.responseText);
+					params.success(data, JSON.stringify(data));
+					model.trigger("fetch");
+				} else {
+					params.error(JSON.parse(_response.responseText), _response.responseText);
+					Ti.API.error("[REST API] ERROR: " + _response.responseText);
+				}
+			});
+			break;
         case 'read':
             apiCall(params, function(_response) {
                 if (_response.success) {
