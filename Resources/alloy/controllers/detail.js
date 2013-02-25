@@ -36,6 +36,7 @@ function Controller() {
     });
     $.__views.__alloyId6.add($.__views.__alloyId7);
     $.__views.companyName = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -65,6 +66,7 @@ function Controller() {
     });
     $.__views.__alloyId8.add($.__views.__alloyId9);
     $.__views.website = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -94,6 +96,7 @@ function Controller() {
     });
     $.__views.__alloyId10.add($.__views.__alloyId11);
     $.__views.industryType = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -130,10 +133,10 @@ function Controller() {
     $.__views.__alloyId12.add($.__views.__alloyId13);
     $.__views.showMapButton = Ti.UI.createButton({
         height: Ti.UI.SIZE,
-        width: Ti.UI.SIZE,
-        left: 0,
-        right: 0,
+        left: 22,
+        right: 22,
         style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+        color: "#496197",
         textAlign: "center",
         title: "Show Map",
         id: "showMapButton"
@@ -165,6 +168,7 @@ function Controller() {
     });
     $.__views.__alloyId15.add($.__views.__alloyId16);
     $.__views.contactName = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -194,6 +198,7 @@ function Controller() {
     });
     $.__views.__alloyId17.add($.__views.__alloyId18);
     $.__views.contactJobTitle = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -223,6 +228,7 @@ function Controller() {
     });
     $.__views.__alloyId19.add($.__views.__alloyId20);
     $.__views.contactPhone = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -252,6 +258,7 @@ function Controller() {
     });
     $.__views.__alloyId21.add($.__views.__alloyId22);
     $.__views.contactMobile = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -281,6 +288,7 @@ function Controller() {
     });
     $.__views.__alloyId23.add($.__views.__alloyId24);
     $.__views.contactEmail = Ti.UI.createTextField({
+        left: 100,
         right: 22,
         textAlign: "right",
         editable: !1,
@@ -321,7 +329,6 @@ function Controller() {
     var args = arguments[0] || {};
     $.parentController = args.parentTab;
     var client = args.data.attributes;
-    debugger;
     if (client) {
         $.companyName.setValue(client.name);
         $.industryType.setValue(client.industryType);
@@ -340,7 +347,16 @@ function Controller() {
         }
     }
     $.showMapButton.addEventListener("click", function(_e) {
-        var mapController = Alloy.createController("MapDetail");
+        var mapController = Alloy.createController("MapDetail", {
+            locationTitle: client.name,
+            addressName: client.primaryLocation.address.addressName,
+            addressLineOne: client.primaryLocation.address.lineOne,
+            addressLineTwo: client.primaryLocation.address.lineTwo,
+            addressLineThree: client.primaryLocation.address.lineThree,
+            city: client.primaryLocation.address.city,
+            postcode: client.primaryLocation.address.postCode,
+            country: client.primaryLocation.address.country.printableName
+        });
         args.parentTab.open(mapController.getView());
     });
     _.extend($, exports);

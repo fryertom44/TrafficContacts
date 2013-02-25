@@ -1,8 +1,8 @@
 var Alloy = require("alloy"), _ = Alloy._, Backbone = Alloy.Backbone;
 
-Alloy.Globals.authHeader = function() {
-    var user = "fryertom@gmail.com", pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2", token = user.concat(":", pass);
-    return "Basic ".concat(Ti.Utils.base64encode(token));
+Alloy.Globals.authHeader = function(user, apiKey) {
+    var user = user || Ti.App.Properties.getString("username"), pass = apiKey || Ti.App.Properties.getString("password"), token = user.concat(":", pass), auth = "Basic ".concat(Ti.Utils.base64encode(token));
+    return auth.replace(/[\n\r]/g, "");
 };
 
 Alloy.createController("index");

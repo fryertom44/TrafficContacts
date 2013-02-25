@@ -1,0 +1,22 @@
+<Alloy>
+	<Window id="loginWindow"  title="Login" class='container'>
+		<TableView class="form">
+			<HeaderView><ImageView id="logo"></HeaderView>
+			<TableViewSection>
+                <TableViewRow>
+	            	<Label class="formLabel">Username:</Label>
+					<TextField hintText="me@example.com" id="username">
+				</TableViewRow>
+    	        <TableViewRow>
+	            	<Label class="formLabel">API Key:</Label>
+    	        	<TextField hintText="API Key" id="password" passwordMask="true">
+	        	</TableViewRow>
+            </TableViewSection>
+			<TableViewSection>
+                <TableViewRow>
+					<Button id="loginButton">Login</Button>
+				</TableViewRow>
+            </TableViewSection>
+		</TableView>
+	</Window>
+</Alloy>

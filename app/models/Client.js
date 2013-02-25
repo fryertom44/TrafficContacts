@@ -1,6 +1,6 @@
 exports.definition = {	
 	config: {
-		"URL": "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client",
+		// "URL": "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client",
 		// "URL":"https://public-api.wordpress.com/rest/v1/freshly-pressed/",
 		"adapter": {
 			"type": "restapi2",

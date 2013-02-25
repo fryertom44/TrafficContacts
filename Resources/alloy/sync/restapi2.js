@@ -2,6 +2,17 @@ function InitAdapter(config) {
     return {};
 }
 
+function appendUrlParams(url, queryParams) {
+    if (queryParams) {
+        url += "?";
+        for (var key in queryParams) {
+            url.substring(url.length - 1, 1) != "?" && (url += "&");
+            url += key + "=" + queryParams[key];
+        }
+    }
+    return url;
+}
+
 function apiCall(_options, _callback) {
     var xhr = Ti.Network.createHTTPClient({
         timeout: 5000
@@ -72,7 +83,7 @@ function Sync(method, model, opts) {
                 params.success(null, _response.responseText);
                 model.trigger("fetch");
             } else {
-                params.error(JSON.parse(_response.responseText), _response.responseText);
+                params.error(_response.responseText, _response.responseText);
                 Ti.API.error("SYNC ERROR: " + _response.responseText);
             }
         });
@@ -111,12 +122,13 @@ function Sync(method, model, opts) {
         });
         break;
       case "read":
+        params.url = appendUrlParams(params.url, params.queryParams);
         apiCall(params, function(_response) {
             if (_response.success) {
                 var data = JSON.parse(_response.responseText);
                 params.success(data, _response.responseText);
             } else {
-                params.error(JSON.parse(_response.responseText), _response.responseText);
+                params.error(_response.responseText, _response.responseText);
                 Ti.API.error("[REST API] ERROR: " + _response.responseText);
             }
         });

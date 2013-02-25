@@ -1,0 +1,63 @@
+".container": {
+    backgroundGradient: {
+        type: 'radial',
+        startPoint: { x: '50%', y: '50%' },
+        endPoint: { x: '70%', y: '70%' },
+        colors: ['#699F21', '#94C138'],
+        startRadius: '90%',
+        endRadius: 0,
+        backfillStart: true
+    }
+}
+
+"Window": {
+    barColor: '#000'
+}
+
+".form": {
+  backgroundColor: "transparent",
+  style: Ti.UI.iPhone.TableViewStyle.GROUPED
+}
+
+"HeaderView": {
+    height: 150
+}
+"TableViewRow":{
+    height: 44,
+    backgroundColor: "#FFF",
+}
+
+"Button" :{
+    height:Ti.UI.SIZE,
+    left: 22,
+    right: 22,
+    style:Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+    color:"#496197",
+    textAlign: "center"
+},
+
+".formLabel": {
+    width: Ti.UI.SIZE,
+    height: Ti.UI.SIZE,
+    color: "#000",
+    font: {
+        fontSize: 17,
+        fontFamily: 'Helvetica Neue',
+        fontWeight: "bold"
+    },
+    left: 22,
+    textAlign: 'left'
+}
+
+"TextField": {
+    left: 120,
+    right: 22,
+    textAlign: 'left',
+    editable: true,
+    color:"#000"
+}
+
+"ImageView":{
+    top : 200,
+    image: "whiteLogo160.png"
+}

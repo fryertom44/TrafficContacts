@@ -4,20 +4,33 @@
 //
 // this code is inspiried by https://github.com/viezel/napp.alloy.adapter.restapi
 //
- 
+
 function InitAdapter(config) {
     return {};
 }
- 
+
+function appendUrlParams(url,queryParams) {
+    if (queryParams) {
+        url += '?';
+
+        for(var key in queryParams) {
+            if (url.substring(url.length-1,1) != "?")
+                url += "&";
+            url += key + '=' + queryParams[key];
+        }
+    };
+    return url;
+}
+
 function apiCall(_options, _callback) {
- 
+
     var xhr = Ti.Network.createHTTPClient({
         timeout : 5000
     });
- 
+
     //Prepare the request
     xhr.open(_options.type, _options.url);
- 
+
     xhr.onload = function() {
         _callback({
             success : true,
@@ -25,7 +38,7 @@ function apiCall(_options, _callback) {
             responseData : xhr.responseData || null
         });
     };
- 
+
     //Handle error
     xhr.onerror = function() {
         _callback({
@@ -37,30 +50,29 @@ function apiCall(_options, _callback) {
     for (var header in _options.headers) {
         xhr.setRequestHeader(header, _options.headers[header]);
     }
- 
+
     if (_options.beforeSend) {
         _options.beforeSend(xhr);
     }
-    
     xhr.send(_options.data || null);
 }
- 
+
 function Sync(method, model, opts) {
- 
+
     var methodMap = {
         'create' : 'POST',
         'read' : 'GET',
         'update' : 'PUT',
         'delete' : 'DELETE'
     };
- 
+
     var type = methodMap[method];
     var params = _.extend({}, opts);
     params.type = type;
- 
+
     //set default headers
     params.headers = params.headers || {};
- 
+
     // We need to ensure that we have a base url.
     if (!params.url) {
         params.url = model.url();
@@ -69,7 +81,7 @@ function Sync(method, model, opts) {
             return;
         }
     }
- 
+
     // For older servers, emulate JSON by encoding the request into an HTML-form.
     if (Alloy.Backbone.emulateJSON) {
         params.contentType = 'application/x-www-form-urlencoded';
@@ -78,7 +90,7 @@ function Sync(method, model, opts) {
             model : params.data
         } : {};
     }
- 
+
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
     // And an `X-HTTP-Method-Override` header.
     if (Alloy.Backbone.emulateHTTP) {
@@ -91,104 +103,107 @@ function Sync(method, model, opts) {
             };
         }
     }
- 
+
     //json data transfers
     params.headers['Content-Type'] = 'application/json';
     params.headers['Accept'] = 'application/json';
 
     switch(method) {
- 
-		case 'delete' :
-			if (!model.id) {
-				params.error(null, "MISSING MODEL ID");
-				Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
-				return;
-			}
-			params.url = params.url + '/' + model.id;
 
-			apiCall(params, function(_response) {
-				if (_response.success) {
-					var data = JSON.parse(_response.responseText);
-					params.success(null, _response.responseText);
-					model.trigger("fetch");
-					// fire event
-				} else {
-					params.error(JSON.parse(_response.responseText), _response.responseText);
-					Ti.API.error('SYNC ERROR: ' + _response.responseText)
-				}
-			});
-			break;
-		case 'create' :
-			// convert to string for API call
-			params.data = JSON.stringify(model.toJSON());
+        case 'delete' :
+            if (!model.id) {
+                params.error(null, "MISSING MODEL ID");
+                Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+                return;
+            }
+            params.url = params.url + '/' + model.id;
 
-			apiCall(params, function(_response) {
-				if (_response.success) {
-					var data = JSON.parse(_response.responseText);
-					//Rest API should return a new model id.
-					if (data.id == undefined) {
-						data.id = guid();
-						//if not - create one
-					}
-					params.success(data, JSON.stringify(data));
-					model.trigger("fetch");
-					// fire event
-				} else {
-					params.error(JSON.parse(_response.responseText), _response.responseText);
-					Ti.API.error('[REST API] ERROR: ' + _response.responseText)
-				}
-			});
-			break;
-		case 'update' :
-			if (!model.id) {
-				params.error(null, "MISSING MODEL ID");
-				Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
-				return;
-			}
-
-			// setup the url & data
-			params.url = params.url + '/' + model.id;
-			params.data = JSON.stringify(model.toJSON());
-
-			apiCall(params, function(_response) {
-				if (_response.success) {
-					var data = JSON.parse(_response.responseText);
-					params.success(data, JSON.stringify(data));
-					model.trigger("fetch");
-				} else {
-					params.error(JSON.parse(_response.responseText), _response.responseText);
-					Ti.API.error("[REST API] ERROR: " + _response.responseText);
-				}
-			});
-			break;
-        case 'read':
             apiCall(params, function(_response) {
                 if (_response.success) {
                     var data = JSON.parse(_response.responseText);
-                    params.success(data, _response.responseText);
+                    params.success(null, _response.responseText);
+                    model.trigger("fetch");
+                    // fire event
+                } else { 
+                    params.error(_response.responseText, _response.responseText);
+                    Ti.API.error('SYNC ERROR: ' + _response.responseText)
+                }
+            });
+            break;
+        case 'create' :
+            // convert to string for API call
+            params.data = JSON.stringify(model.toJSON());
+
+            apiCall(params, function(_response) {
+                if (_response.success) {
+                    var data = JSON.parse(_response.responseText);
+                    //Rest API should return a new model id.
+                    if (data.id == undefined) {
+                        data.id = guid();
+                        //if not - create one
+                    }
+                    params.success(data, JSON.stringify(data));
+                    model.trigger("fetch");
+                    // fire event
                 } else {
                     params.error(JSON.parse(_response.responseText), _response.responseText);
+                    Ti.API.error('[REST API] ERROR: ' + _response.responseText)
+                }
+            });
+            break;
+        case 'update' :
+            if (!model.id) {
+                params.error(null, "MISSING MODEL ID");
+                Ti.API.error("[REST API] ERROR: MISSING MODEL ID");
+                return;
+            }
+
+            // setup the url & data
+            params.url = params.url + '/' + model.id;
+            params.data = JSON.stringify(model.toJSON());
+
+            apiCall(params, function(_response) {
+                if (_response.success) {
+                    var data = JSON.parse(_response.responseText);
+                    params.success(data, JSON.stringify(data));
+                    model.trigger("fetch");
+                } else {
+                    params.error(JSON.parse(_response.responseText), _response.responseText);
+                    Ti.API.error("[REST API] ERROR: " + _response.responseText);
+                }
+            });
+            break;
+        case 'read':
+            
+            params.url = appendUrlParams(params.url, params.queryParams);
+
+            apiCall(params, function(_response) {
+                if (_response.success) { 
+                    var data = JSON.parse(_response.responseText);
+                    params.success(data, _response.responseText);
+                } else { 
+                    params.error(_response.responseText, _response.responseText);
                     Ti.API.error('[REST API] ERROR: ' + _response.responseText)
                 }
             })
             break;
     }
- 
+
 };
- 
+
 //we need underscore
 var _ = require("alloy/underscore")._;
- 
+
 module.exports.sync = Sync;
- 
+
 module.exports.beforeModelCreate = function(config) {
     config = config || {};
     InitAdapter(config);
     return config;
 };
- 
+
 module.exports.afterModelCreate = function(Model) {
     Model = Model || {};
     Model.prototype.config.Model = Model;
     return Model;
-};
+}; 

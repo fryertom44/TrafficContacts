@@ -1,0 +1,18 @@
+<Alloy>
+	<TabGroup>
+        <Require src="clients"/>
+		<Tab id="suppliersTab" title="Suppliers" icon="KS_nav_views.png">
+			<Window title="Suppliers">
+				<Label>I am Window 2</Label>
+			</Window>
+		</Tab>
+		<Tab id="myLocationTab" title="My Location" icon="KS_nav_views.png">
+			<Require src="mapDetail"/>
+		</Tab>
+		<Tab id="settingsTab" title="Settings" icon="KS_nav_views.png">
+			<Window title="Settings">
+				<Label>Settings go here</Label>
+			</Window>
+		</Tab>
+	</TabGroup>
+</Alloy>

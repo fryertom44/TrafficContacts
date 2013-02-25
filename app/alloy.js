@@ -9,9 +9,12 @@
 // object. For example:
 //
 // Alloy.Globals.someGlobalFunction = function(){};
-Alloy.Globals.authHeader = function(){
-	var user = "fryertom@gmail.com";
-	var pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2";
+Alloy.Globals.authHeader = function(user, apiKey){
+//"fryertom@gmail.com";
+	var user = user || Ti.App.Properties.getString('username');
+//"MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2";
+	var pass = apiKey || Ti.App.Properties.getString('password')
 	var token = user.concat(":", pass);
-	return "Basic ".concat(Ti.Utils.base64encode(token));
+	var auth = "Basic ".concat(Ti.Utils.base64encode(token));
+    return auth.replace(/[\n\r]/g, '');
 }

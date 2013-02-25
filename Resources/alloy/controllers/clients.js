@@ -22,14 +22,13 @@ function Controller() {
     $.addTopLevelView($.__views.clientsTab);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    sendAuthentication = function(xhr) {
-        var user = "fryertom@gmail.com", pass = "MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2", token = user.concat(":", pass);
-        xhr.setRequestHeader("Authorization", "Basic ".concat(Ti.Utils.base64encode(token)));
-    };
     Alloy.Collections.Client = Alloy.createCollection("client");
     Alloy.Collections.Client.fetch({
         headers: {
-            Authorization: "Basic ZnJ5ZXJ0b21AZ21haWwuY29tOk1SNmdGZXFHNTg1SjVTVlo3TG52MTI4d0hoVDJFQmdqbDVDN0YyaTI="
+            Authorization: Alloy.Globals.authHeader()
+        },
+        queryParams: {
+            order: "name"
         },
         success: function(collection, response) {
             Ti.API.debug("Clients list loaded!!!!!");
@@ -46,6 +45,10 @@ function Controller() {
         },
         error: function(collection, response) {
             Ti.API.debug("Loading Clients list failed");
+            Ti.UI.createAlertDialog({
+                title: "Loading clients failed",
+                message: "Check network connection and try again."
+            }).show();
             console.log(response);
         }
     });
