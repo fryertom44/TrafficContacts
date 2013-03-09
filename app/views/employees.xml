@@ -1,0 +1,11 @@
+<Alloy>
+<!-- <View class="container"> -->
+	<Window id="employeesWindow"  title="Contacts" class='container'>
+		<TableView id="list">
+			<HeaderPullView platform='ios' />
+			<HeaderView platform='android'>
+				<Button title='Refresh' onClick='refreshItems' />
+			</HeaderView>
+		</TableView>
+	</Window>
+</Alloy>

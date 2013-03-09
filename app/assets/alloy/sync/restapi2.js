@@ -23,7 +23,6 @@ function appendUrlParams(url,queryParams) {
 }
 
 function apiCall(_options, _callback) {
-
     var xhr = Ti.Network.createHTTPClient({
         timeout : 5000
     });
@@ -174,7 +173,6 @@ function Sync(method, model, opts) {
             });
             break;
         case 'read':
-            
             params.url = appendUrlParams(params.url, params.queryParams);
 
             apiCall(params, function(_response) {

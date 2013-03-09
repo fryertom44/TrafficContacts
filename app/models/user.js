@@ -7,7 +7,7 @@ exports.definition = {
         },
         "columns": {
             "id":"int",
-        },
+        }
 	},
 	extendModel: function(Model) {
 		_.extend(Model.prototype, {
@@ -17,7 +17,25 @@ exports.definition = {
             },
             parse : function(_resp, xhr) {
                 return _resp;
-            }
+            },
+            getSelectedClient: function() {
+                return this._selectedClient;
+            },  
+            setSelectedClient: function(client) {
+                this._selectedClient = client;  
+            },  
+            getSelectedEmployee: function() {
+                return this._selectedEmployee;
+            },  
+            setSelectedEmployee: function(employee) {
+                this._selectedEmployee = employee;  
+            },  
+            getSelectedTab: function() {
+                return this._selectedTab;
+            },  
+            setSelectedTab: function(tab) {
+                this._selectedTab = tab;  
+            },  
 		});
 		
 		return Model;

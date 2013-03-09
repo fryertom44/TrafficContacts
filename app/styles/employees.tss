@@ -2,6 +2,7 @@
     backgroundColor: "#fff",
     barColor: '#000'
 },
+
 ".container": {
 	backgroundColor: "white"
 }

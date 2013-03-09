@@ -19,9 +19,12 @@
   style: Ti.UI.iPhone.TableViewStyle.GROUPED
 }
 
-"HeaderView": {
-    height: 150
+"ImageView": {
+    // top : 200,
+    height: 200,
+    image: "whiteLogo160.png"
 }
+
 "TableViewRow":{
     height: 44,
     backgroundColor: "#FFF",
@@ -55,9 +58,4 @@
     textAlign: 'left',
     editable: true,
     color:"#000"
-}
-
-"ImageView":{
-    top : 200,
-    image: "whiteLogo160.png"
 }

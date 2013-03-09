@@ -17,6 +17,18 @@ exports.definition = {
             },
             parse: function(_resp, xhr) {
                 return _resp;
+            },
+            getAddresses: function() {
+                return this._addresses;
+            },
+            setAddresses: function(addresses) {
+                this._addresses = addresses;
+            },
+            getContacts: function() {
+                return this._contacts;
+            },
+            setContacts: function(contacts) {
+                this._contacts = contacts;
             }
         });
         return Model;

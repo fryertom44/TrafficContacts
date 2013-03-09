@@ -53,13 +53,15 @@ function Controller() {
         }
     });
     $.list.addEventListener("click", function(_e) {
-        var clientSelected = Alloy.Collections.Client.get(_e.row.id), detailController = Alloy.createController("detail", {
-            parentTab: $.clientsTab,
+        var clientSelected = Alloy.Collections.Client.get(_e.row.id);
+        Alloy.Models.User.setSelectedClient(clientSelected);
+        var detailController = Alloy.createController("clientDetail", {
             data: clientSelected
         });
-        $.clientsTab.open(detailController.getView());
+        Alloy.Globals.parent = $.clientsTab;
+        Alloy.Globals.parent.open(detailController.getView());
     });
-    __defers["$.__views.__alloyId2!click!refreshItems"] && $.__views.__alloyId2.addEventListener("click", refreshItems);
+    __defers["$.__views.__alloyId15!click!refreshItems"] && $.__views.__alloyId15.addEventListener("click", refreshItems);
     _.extend($, exports);
 }
 

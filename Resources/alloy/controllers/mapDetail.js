@@ -3,46 +3,33 @@ function Controller() {
     $model = arguments[0] ? arguments[0].$model : null;
     var $ = this, exports = {}, __defers = {};
     $.__views.mapWindow = Ti.UI.createWindow({
-        title: "Location",
-        barColor: "#000",
         backgroundColor: "#fff",
+        barColor: "#000",
+        title: "Location",
         id: "mapWindow"
     });
     $.addTopLevelView($.__views.mapWindow);
-    var __alloyId44 = [];
+    var __alloyId51 = [];
     $.__views.mapView = Ti.Map.createView({
         mapType: Ti.Map.STANDARD_TYPE,
         animate: !0,
         regionFit: !0,
         userLocation: !1,
-        annotations: __alloyId44,
+        annotations: __alloyId51,
         ns: Ti.Map,
         id: "mapView"
     });
     $.__views.mapWindow.add($.__views.mapView);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var args = arguments[0] || {}, myLocation = Titanium.Geolocation.getCurrentPosition(function(e) {
-        if (e.error) {
-            alert("error " + JSON.stringify(e.error));
-            return;
-        }
-        var current_longitude = e.coords.longitude, current_latitude = e.coords.latitude, current_altitude = e.coords.altitude, current_heading = e.coords.heading, current_accuracy = e.coords.accuracy, current_speed = e.coords.speed, current_timestamp = e.coords.timestamp, current_altitudeAccuracy = e.coords.altitudeAccuracy, thisLocation = Titanium.Map.createAnnotation({
-            animate: !0,
-            title: "Current Location",
-            pincolor: Titanium.Map.ANNOTATION_GREEN,
-            latitude: parseFloat(current_latitude),
-            longitude: parseFloat(current_longitude)
-        });
-        return thisLocation;
-    });
+    var args = arguments[0] || {}, address = args.address;
     xhr = Titanium.Network.createHTTPClient();
-    var query = args.addressLineOne + "," + args.addressLineTwo + "," + args.addressLineThree + "," + args.city + "," + args.postcode + "," + args.country;
+    var query = "";
+    address && (query = address.getPrintableAddress(","));
     xhr.open("GET", "http://maps.googleapis.com/maps/geo?output=json&q=" + query);
     xhr.onload = function() {
         var json = JSON.parse(this.responseText);
         Ti.API.info(json);
-        debugger;
         var theLong = json.Placemark[0].Point.coordinates[0], theLat = json.Placemark[0].Point.coordinates[1];
         $.mapView.setRegion({
             latitude: theLat,
@@ -51,16 +38,16 @@ function Controller() {
             longitudeDelta: "1"
         });
         var clientAnnotation = Titanium.Map.createAnnotation({
-            title: args.locationTitle,
-            subtitle: args.addressName,
+            title: Alloy.Models.User.getSelectedClient().attributes.name,
+            subtitle: address.getPrintableAddress("\n", !0),
             latitude: theLat,
             longitude: theLong,
             pincolor: Ti.Map.ANNOTATION_RED,
             animate: !0
         });
         $.mapView.addAnnotation(clientAnnotation);
-        myLocation && $.mapView.addAnnotation(myLocation);
         $.mapview.selectAnnotation(clientAnnotation);
+        $.mapView.userLocation = !0;
         $.mapView.setRegionFit(!0);
     };
     xhr.onerror = function() {

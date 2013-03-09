@@ -15,7 +15,20 @@ exports.definition = {
                 return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/address/" + this.id;
             },
             parse: function(_resp, xhr) {
-                return _resp.resultList;
+                return _resp;
+            },
+            getPrintableAddress: function(separator, showAddressName) {
+                var addressArray = [];
+                showAddressName && addressArray.push(this.attributes.name);
+                addressArray.push(this.attributes.address.lineOne);
+                addressArray.push(this.attributes.address.lineTwo);
+                addressArray.push(this.attributes.address.lineThree);
+                addressArray.push(this.attributes.address.city);
+                addressArray.push(this.attributes.address.postCode);
+                addressArray.push(this.attributes.address.country.printableName);
+                var addressAsText = "";
+                for (var i = 0, j = addressArray.length; i < j; i++) addressArray[i] && (addressAsText += addressArray[i] + separator);
+                return addressAsText;
             }
         });
         return Model;
@@ -23,10 +36,10 @@ exports.definition = {
     extendCollection: function(Collection) {
         _.extend(Collection.prototype, {
             url: function() {
-                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/address/";
+                return "https://api.sohnar.com/TrafficLiteServer/openapi/crm/client/" + this.parentCRMEntryId + "/locations/";
             },
             parse: function(_resp, xhr) {
-                return _resp.resultList;
+                return _resp;
             }
         });
         return Collection;

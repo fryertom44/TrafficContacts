@@ -1,5 +1,7 @@
 var args = arguments[0] || {};
 
+var address = args.address;
+
 // var addr = 'SW1A 2AA, London, United Kingdom';
 // Titanium.Geolocation.forwardGeocoder(addr, function(evt) {
 // $.mapView.setRegion({
@@ -20,39 +22,44 @@ var args = arguments[0] || {};
 // });
 
 // var myLocation = Titanium.Geolocation.getCurrentPosition(function(e) {
-    // if (e.error) {
-        // alert('error ' + JSON.stringify(e.error))
-        // return;
-    // }
-// 
-    // var current_longitude = e.coords.longitude;
-    // var current_latitude = e.coords.latitude;
-    // var current_altitude = e.coords.altitude;
-    // var current_heading = e.coords.heading;
-    // var current_accuracy = e.coords.accuracy;
-    // var current_speed = e.coords.speed;
-    // var current_timestamp = e.coords.timestamp;
-    // var current_altitudeAccuracy = e.coords.altitudeAccuracy;
-// 
-    // var thisLocation = Titanium.Map.createAnnotation({
-        // animate : true,
-        // title : "Current Location",
-        // pincolor : Titanium.Map.ANNOTATION_GREEN,
-        // latitude : parseFloat(current_latitude),
-        // longitude : parseFloat(current_longitude),
-    // });
-    // return thisLocation;
+// if (e.error) {
+// alert('error ' + JSON.stringify(e.error))
+// return;
+// }
+//
+// var current_longitude = e.coords.longitude;
+// var current_latitude = e.coords.latitude;
+// var current_altitude = e.coords.altitude;
+// var current_heading = e.coords.heading;
+// var current_accuracy = e.coords.accuracy;
+// var current_speed = e.coords.speed;
+// var current_timestamp = e.coords.timestamp;
+// var current_altitudeAccuracy = e.coords.altitudeAccuracy;
+//
+// var thisLocation = Titanium.Map.createAnnotation({
+// animate : true,
+// title : "Current Location",
+// pincolor : Titanium.Map.ANNOTATION_GREEN,
+// latitude : parseFloat(current_latitude),
+// longitude : parseFloat(current_longitude),
+// });
+// return thisLocation;
 // });
 
 xhr = Titanium.Network.createHTTPClient();
-var query = args.addressLineOne +','+ args.addressLineTwo +','+ args.addressLineThree +','+ args.city +','+ args.postcode +','+ args.country;
+
+var query = "";
+if (address) {
+    query = address.getPrintableAddress(",");
+}
+
 // or whatever you want to forward geocode
 xhr.open('GET', 'http://maps.googleapis.com/maps/geo?output=json&q=' + query);
 
 xhr.onload = function() {
     var json = JSON.parse(this.responseText);
     Ti.API.info(json);
-    debugger;
+
     var theLong = json.Placemark[0].Point.coordinates[0];
     var theLat = json.Placemark[0].Point.coordinates[1];
 
@@ -64,8 +71,8 @@ xhr.onload = function() {
     });
 
     var clientAnnotation = Titanium.Map.createAnnotation({
-        title : args.locationTitle,
-        subtitle : args.addressName,
+        title : Alloy.Models.User.getSelectedClient().attributes.name,
+        subtitle : address.getPrintableAddress("\n",true),
         latitude : theLat,
         longitude : theLong,
         // image: 'appcelerator_small.png'
@@ -75,10 +82,10 @@ xhr.onload = function() {
     $.mapView.addAnnotation(clientAnnotation);
 
     // if (myLocation) {
-        // $.mapView.addAnnotation(myLocation);
+    // $.mapView.addAnnotation(myLocation);
     // };
-//     
-    // $.mapview.selectAnnotation(clientAnnotation);
+    //
+    $.mapview.selectAnnotation(clientAnnotation);
     $.mapView.userLocation = true;
     $.mapView.setRegionFit(true);
 

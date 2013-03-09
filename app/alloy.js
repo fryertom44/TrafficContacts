@@ -9,7 +9,12 @@
 // object. For example:
 //
 // Alloy.Globals.someGlobalFunction = function(){};
+
+//Global singleton model, used for storing user details and also the current selection
+Alloy.Models.User = Alloy.createModel('user');
+
 Alloy.Globals.authHeader = function(user, apiKey){
+    
 //"fryertom@gmail.com";
 	var user = user || Ti.App.Properties.getString('username');
 //"MR6gFeqG585J5SVZ7Lnv128wHhT2EBgjl5C7F2i2";
